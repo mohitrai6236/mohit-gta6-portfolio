@@ -4,629 +4,561 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MOHIT RAI | GRAND PORTFOLIO VI</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
     :root {
-      --bg: #0c0618;
-      --card: rgba(18, 11, 36, 0.88);
-      --pink: #ff2a85;
-      --cyan: #00f0ff;
-      --gold: #ffd700;
-      --text: #ffffff;
-      --muted: #b8bfd8;
+      --bg: #0c0618; --card: rgba(18, 11, 36, 0.9);
+      --pink: #ff2a85; --cyan: #00f0ff; --gold: #ffd700; --orange: #ff7a00;
+      --text: #ffffff; --muted: #b8bfd8;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
     body {
       font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
       background: radial-gradient(circle at top, #2a0d45 0%, #0c0618 65%);
-      color: var(--text);
-      line-height: 1.6;
-      overflow-x: hidden;
+      color: var(--text); line-height: 1.6; overflow-x: hidden;
     }
+    .loader {
+      position: fixed; inset: 0; z-index: 20000; background: #0c0618;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
+    }
+    .loader-bar { width: 280px; height: 8px; background: rgba(255,255,255,0.12); border-radius: 99px; overflow: hidden; }
+    .loader-fill { height: 100%; background: linear-gradient(90deg, var(--pink), var(--cyan)); transition: width 0.2s; }
     nav {
-      position: sticky; top: 0; z-index: 50;
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 14px 5%;
-      background: rgba(12, 6, 24, 0.9);
-      backdrop-filter: blur(12px);
-      border-bottom: 2px solid var(--pink);
+      position: sticky; top: 0; z-index: 50; display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 5%; background: rgba(12, 6, 24, 0.92); backdrop-filter: blur(12px);
+      border-bottom: 2px solid var(--pink); gap: 12px; flex-wrap: wrap;
     }
-    .logo { font-weight: 900; font-size: 1.3rem; letter-spacing: 2px; color: var(--cyan); }
+    .logo { font-weight: 900; font-size: 1.2rem; letter-spacing: 2px; color: var(--cyan); }
     .logo span { color: var(--pink); }
-    .nav-links { display: flex; gap: 22px; flex-wrap: wrap; }
-    .nav-links a {
-      color: var(--text); text-decoration: none; font-weight: 700; font-size: 0.9rem;
-      text-transform: uppercase; letter-spacing: 1px; transition: color 0.2s;
+    .nav-links { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+    .nav-links a, .nav-btn {
+      color: var(--text); text-decoration: none; font-weight: 700; font-size: 0.82rem;
+      text-transform: uppercase; letter-spacing: 1px; background: none; border: none; cursor: pointer;
     }
-    .nav-links a:hover { color: var(--cyan); }
-
+    .nav-links a:hover, .nav-btn:hover { color: var(--cyan); }
+    .pill-btn {
+      padding: 6px 12px; border-radius: 999px; font-weight: 800; font-size: 0.78rem;
+      border: 1px solid var(--cyan); color: var(--cyan); background: rgba(0,240,255,0.1); cursor: pointer;
+    }
+    .pill-btn.active { background: var(--pink); border-color: var(--pink); color: #fff; }
+    section { max-width: 1240px; margin: 0 auto; padding: 44px 5%; }
+    .sec-title {
+      font-size: 1.85rem; font-weight: 900; text-transform: uppercase; letter-spacing: 2px;
+      margin-bottom: 22px; color: var(--cyan); border-left: 6px solid var(--pink); padding-left: 14px;
+    }
     .hero {
-      display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 40px; align-items: center;
-      padding: 60px 5% 40px; max-width: 1280px; margin: 0 auto;
+      display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 36px; align-items: center;
+      padding: 50px 5% 30px; max-width: 1240px; margin: 0 auto;
     }
     @media (max-width: 860px) { .hero { grid-template-columns: 1fr; text-align: center; } }
-    .badge {
-      display: inline-block; padding: 6px 14px; border-radius: 999px;
-      background: rgba(0, 240, 255, 0.14); border: 1px solid var(--cyan);
-      color: var(--cyan); font-weight: 700; font-size: 0.8rem; letter-spacing: 1.5px;
-      margin-bottom: 14px;
-    }
-    h1 {
-      font-size: clamp(2.8rem, 6vw, 5rem); font-weight: 900; line-height: 1.05;
-      text-shadow: 4px 4px 0 var(--pink);
-      margin-bottom: 14px;
-    }
-    .subtitle { font-size: 1.2rem; color: var(--gold); font-weight: 700; margin-bottom: 18px; }
-    .hero p { color: var(--muted); max-width: 600px; margin-bottom: 26px; }
-    .cta-row { display: flex; gap: 14px; flex-wrap: wrap; }
-    .btn {
-      padding: 13px 26px; border-radius: 10px; font-weight: 800; text-decoration: none;
-      text-transform: uppercase; letter-spacing: 1px; cursor: pointer; border: none;
-      transition: transform 0.15s, box-shadow 0.15s;
-    }
-    .btn:hover { transform: translateY(-2px); }
-    .btn-pink { background: var(--pink); color: #fff; box-shadow: 0 0 20px rgba(255, 42, 133, 0.5); }
+    h1 { font-size: clamp(2.6rem, 5.5vw, 4.6rem); font-weight: 900; line-height: 1.05; text-shadow: 4px 4px 0 var(--pink); margin-bottom: 12px; }
+    .subtitle { font-size: 1.15rem; color: var(--gold); font-weight: 700; margin-bottom: 14px; }
+    .btn { padding: 12px 22px; border-radius: 10px; font-weight: 800; text-decoration: none; text-transform: uppercase; cursor: pointer; border: none; display: inline-block; }
+    .btn-pink { background: var(--pink); color: #fff; box-shadow: 0 0 18px rgba(255,42,133,0.45); }
     .btn-cyan { background: transparent; color: var(--cyan); border: 2px solid var(--cyan); }
-
     .portrait-frame {
-      position: relative; border-radius: 22px; overflow: hidden;
-      border: 4px solid var(--pink);
-      box-shadow: 0 0 40px rgba(255, 42, 133, 0.35), 0 0 60px rgba(0, 240, 255, 0.2);
-      max-width: 420px; margin: 0 auto;
-      cursor: pointer;
-      transform-style: preserve-3d;
+      position: relative; border-radius: 22px; overflow: hidden; border: 4px solid var(--pink);
+      box-shadow: 0 0 40px rgba(255,42,133,0.35); max-width: 390px; margin: 0 auto; cursor: pointer;
       transition: transform 0.12s ease-out, box-shadow 0.25s ease;
     }
-    .portrait-frame:hover {
-      box-shadow: 0 0 55px rgba(255, 42, 133, 0.85), 0 0 90px rgba(0, 240, 255, 0.65);
-    }
-    .portrait-glare {
-      position: absolute; inset: 0; pointer-events: none; opacity: 0;
-      background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.45), rgba(0,240,255,0.18) 35%, transparent 70%);
-      transition: opacity 0.2s; mix-blend-mode: screen;
-    }
-    .portrait-frame:hover .portrait-glare { opacity: 1; }
-    .portrait-hint {
-      position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
-      background: rgba(12, 6, 24, 0.82); border: 1px solid var(--cyan);
-      color: var(--cyan); padding: 4px 12px; border-radius: 999px;
-      font-size: 0.75rem; font-weight: 800; letter-spacing: 1px; pointer-events: none;
-    }
-    canvas#overdriveFx {
-      position: fixed; inset: 0; width: 100vw; height: 100vh;
-      pointer-events: none; z-index: 9999;
-    }
-    .overdrive-flash {
-      animation: hyperShake 0.45s cubic-bezier(.36,.07,.19,.97) both;
-    }
-    @keyframes hyperShake {
-      10%, 90% { transform: translate3d(-3px, 2px, 0) scale(1.01); filter: hue-rotate(25deg); }
-      20%, 80% { transform: translate3d(4px, -3px, 0) scale(1.02); filter: hue-rotate(-25deg); }
-      30%, 50%, 70% { transform: translate3d(-5px, 3px, 0); }
-      40%, 60% { transform: translate3d(5px, -2px, 0); }
-    }
     .portrait-frame img { width: 100%; display: block; }
-
-    section { max-width: 1280px; margin: 0 auto; padding: 50px 5%; }
-    .sec-title {
-      font-size: 2rem; font-weight: 900; text-transform: uppercase; letter-spacing: 2px;
-      margin-bottom: 24px; color: var(--cyan);
-      border-left: 6px solid var(--pink); padding-left: 16px;
+    .portrait-glare { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen; }
+    .portrait-hint {
+      position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+      background: rgba(12,6,24,0.85); border: 1px solid var(--cyan); color: var(--cyan);
+      padding: 4px 12px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; white-space: nowrap;
     }
-
-    /* Interactive Mini-Game */
-    .game-wrap {
-      background: var(--card); border: 2px solid var(--cyan); border-radius: 18px;
-      padding: 20px; box-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
-    }
-    .game-hud {
-      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
-      margin-bottom: 14px; font-weight: 800;
-    }
-    .stars { color: var(--gold); font-size: 1.3rem; letter-spacing: 3px; }
-    canvas#gtaGame {
-      width: 100%; max-width: 100%; height: 380px; display: block;
-      background: linear-gradient(180deg, #1b0a33 0%, #3d1254 45%, #19132b 46%, #120d21 100%);
-      border-radius: 12px; border: 2px solid var(--pink);
-    }
-    .game-controls {
-      display: flex; justify-content: space-between; align-items: center; margin-top: 12px; flex-wrap: wrap; gap: 10px;
-    }
-    .touch-btns { display: flex; gap: 10px; }
-    .touch-btn {
-      padding: 10px 18px; border-radius: 8px; background: rgba(255,255,255,0.1);
-      color: #fff; border: 1px solid var(--cyan); font-weight: 800; cursor: pointer;
-    }
-
-    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px; }
     .card {
-      background: var(--card); border: 2px solid rgba(0, 240, 255, 0.35);
-      border-radius: 16px; padding: 24px; transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
-      cursor: pointer; position: relative; overflow: hidden;
+      background: var(--card); border: 2px solid rgba(0,240,255,0.32); border-radius: 16px;
+      padding: 22px; transition: transform 0.2s, border-color 0.2s;
     }
-    .card:hover {
-      border-color: var(--pink); transform: translateY(-6px) scale(1.015);
-      box-shadow: 0 12px 32px rgba(255, 42, 133, 0.35);
+    .card:hover { border-color: var(--pink); transform: translateY(-4px); }
+    .card h3 { color: var(--gold); margin-bottom: 6px; }
+    .meta { color: var(--cyan); font-size: 0.88rem; font-weight: 700; margin-bottom: 10px; }
+    .skill-bar { background: rgba(255,255,255,0.1); height: 10px; border-radius: 99px; overflow: hidden; margin-top: 6px; }
+    .skill-fill { height: 100%; background: linear-gradient(90deg, var(--pink), var(--cyan)); }
+    .map-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px;
+      background: rgba(10, 6, 22, 0.9); border: 2px solid var(--cyan); border-radius: 16px; padding: 20px;
     }
-    .card h3 { color: var(--gold); font-size: 1.25rem; margin-bottom: 6px; }
-    .card .meta { color: var(--cyan); font-size: 0.9rem; font-weight: 700; margin-bottom: 12px; }
-    .card ul { padding-left: 18px; color: var(--muted); }
-    .card li { margin-bottom: 6px; }
-
-    .tags { display: flex; flex-wrap: wrap; gap: 10px; }
-    .tag {
-      padding: 8px 16px; border-radius: 8px; font-weight: 700; font-size: 0.9rem;
-      background: rgba(255, 42, 133, 0.14); border: 1px solid var(--pink); color: #fff;
-      cursor: pointer; transition: transform 0.15s, background 0.2s, box-shadow 0.2s;
+    .map-node {
+      padding: 16px; border-radius: 12px; border: 1px solid var(--pink); background: rgba(255,42,133,0.08);
+      cursor: pointer; text-align: left; color: #fff; transition: transform 0.15s, background 0.2s;
     }
-    .tag:hover { transform: scale(1.12) rotate(-2deg); box-shadow: 0 0 16px var(--cyan); border-color: var(--cyan); }
-    .tag.equipped { background: var(--gold); color: #0c0618; border-color: #fff; box-shadow: 0 0 20px var(--gold); }
+    .map-node:hover { transform: scale(1.04); background: rgba(0,240,255,0.16); border-color: var(--cyan); }
+    .phone-fab {
+      position: fixed; bottom: 20px; right: 20px; z-index: 900;
+      background: var(--pink); color: #fff; border: 2px solid #fff; border-radius: 999px;
+      padding: 12px 18px; font-weight: 900; cursor: pointer; box-shadow: 0 0 24px rgba(255,42,133,0.6);
+    }
+    .phone-drawer {
+      position: fixed; bottom: 76px; right: 20px; z-index: 900; width: 270px;
+      background: #120826; border: 3px solid var(--cyan); border-radius: 24px; padding: 18px;
+      box-shadow: 0 0 36px rgba(0,240,255,0.35);
+    }
+    .phone-link {
+      display: block; padding: 9px 12px; margin-top: 8px; border-radius: 10px;
+      background: rgba(255,255,255,0.07); color: #fff; text-decoration: none; font-weight: 700; font-size: 0.88rem;
+    }
+    .phone-link:hover { background: var(--pink); }
+    canvas#gtaGame {
+      width: 100%; height: 340px; display: block; border-radius: 12px; border: 2px solid var(--pink);
+      background: linear-gradient(180deg, #1b0a33 0%, #3d1254 45%, #120d21 100%);
+    }
+    video { width: 100%; border-radius: 16px; border: 3px solid var(--pink); cursor: pointer; }
     #gtaToast {
-      position: fixed; top: 82px; right: 24px; z-index: 10000;
-      background: rgba(12, 6, 24, 0.95); border: 2px solid var(--gold);
-      color: var(--gold); padding: 12px 22px; border-radius: 12px;
-      font-weight: 900; letter-spacing: 1.5px; opacity: 0; pointer-events: none;
-      transform: translateY(-12px); transition: opacity 0.25s, transform 0.25s;
-      box-shadow: 0 0 28px rgba(255, 215, 0, 0.45);
+      position: fixed; top: 76px; right: 20px; z-index: 10000; background: #0c0618;
+      border: 2px solid var(--gold); color: var(--gold); padding: 10px 18px; border-radius: 10px;
+      font-weight: 900; pointer-events: none;
     }
-    #gtaToast.show { opacity: 1; transform: translateY(0); }
-
-    video {
-      width: 100%; border-radius: 16px; border: 3px solid var(--pink);
-      box-shadow: 0 0 30px rgba(255, 42, 133, 0.3);
-    }
-    footer {
-      text-align: center; padding: 36px 5%; border-top: 1px solid rgba(255,255,255,0.12);
-      color: var(--muted); font-size: 0.9rem;
-    }
+    canvas#overdriveFx { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999; }
+    .recruiter-wrap { background: #ffffff; color: #111827; border-radius: 16px; padding: 32px; max-width: 960px; margin: 30px auto; }
+    .recruiter-wrap h2 { color: #111827; border-bottom: 2px solid #e5e7eb; padding-bottom: 6px; margin: 18px 0 10px; }
   </style>
 </head>
 <body>
-  <nav>
-    <div class="logo">MOHIT<span>RAI</span> // VI</div>
-    <div class="nav-links">
-      <a href="#game">Play Heist</a>
-      <a href="#trailer">Trailer</a>
-      <a href="#missions">Missions</a>
-      <a href="#loadout">Loadout</a>
-      <a href="#contact">Contact</a>
-    </div>
-  </nav>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
 
-  <header class="hero">
-    <div>
-      <div class="badge">LEONIDA // NOIDA, INDIA</div>
-      <h1>MOHIT RAI</h1>
-      <div class="subtitle">DATA ANALYST | DATA QUALITY | DASHBOARD REPORTING</div>
-      <p>
-        Data-focused professional with experience in survey programming, data validation, quality assurance,
-        variable mapping, and market research reporting. 15+ online market research surveys delivered using
-        Decipher, Studio, SQL, Python, Excel, and Power BI.
-      </p>
-      <div class="cta-row">
-        <a href="#game" class="btn btn-pink">Play Data Heist Game</a>
-        <a href="#trailer" class="btn btn-cyan">Watch Launch Trailer</a>
-      </div>
-    </div>
-    <div class="portrait-frame" id="heroPortrait">
-      <img src="portrait.jpg" alt="Mohit Rai GTA 6 Portrait" />
-      <div class="portrait-glare" id="portraitGlare"></div>
-      <div class="portrait-hint">HOVER &amp; CLICK FOR HYPER-OVERDRIVE</div>
-    </div>
-  </header>
-  <canvas id="overdriveFx"></canvas>
-  <div id="gtaToast">MISSION PASSED! +RESPECT</div>
+    const PROFILE = {
+      name: "Mohit Rai",
+      role: "Data Analyst | Data Quality | Dashboard Reporting",
+      location: "Noida, Uttar Pradesh, India",
+      email: "mrai645@gmail.com",
+      phone: "+91 8755238702",
+      linkedin: "https://www.linkedin.com/in/mohitrai6236",
+      github: "https://github.com/mohitrai6236",
+      summary: "Data-focused professional with experience in survey programming, data validation, quality assurance, variable mapping, and market research reporting. Skilled in reviewing survey datasets, identifying inconsistencies, and verifying data exports using Decipher, Studio, SQL, Python, Microsoft Excel, and Power BI."
+    };
 
-  <section id="game">
-    <h2 class="sec-title">Interactive Mini-Game: Vice City Heli-Heist</h2>
-    <div class="game-wrap">
-      <div class="game-hud">
-        <div>SCORE: <span id="score" style="color:var(--cyan)">0</span></div>
-        <div>COLLECTED SKILL: <span id="lastSkill" style="color:var(--pink)">READY</span></div>
-        <div class="stars" id="stars">★☆☆☆☆</div>
-        <button class="btn btn-pink" id="startBtn" style="padding:8px 18px;font-size:0.85rem;">Start / Restart</button>
-      </div>
-      <canvas id="gtaGame" width="1100" height="380"></canvas>
-      <div class="game-controls">
-        <span style="color:var(--muted);font-size:0.9rem;">Pilot your chopper with <strong>↑ / ↓</strong>, <strong>W / S</strong>, or <strong>move/touch</strong> on the sky. Collect skill drops, dodge red drones!</span>
-        <div class="touch-btns">
-          <button class="touch-btn" id="upBtn">▲ CLIMB</button>
-          <button class="touch-btn" id="downBtn">▼ DIVE</button>
-        </div>
-      </div>
-    </div>
-  </section>
+    const SKILLS = [
+      { name: "Decipher & Survey Programming", level: 95 },
+      { name: "Data Cleaning, Validation & QA", level: 95 },
+      { name: "SQL, Python & Microsoft Excel", level: 88 },
+      { name: "Power BI & Studio Dashboards", level: 85 },
+      { name: "HTML, CSS, JavaScript, React & Next.js", level: 82 }
+    ];
 
-  <section id="trailer">
-    <h2 class="sec-title">Official Launch Trailer</h2>
-    <video controls poster="portrait.jpg">
-      <source src="trailer.mp4" type="video/mp4" />
-    </video>
-  </section>
-
-  <section id="missions">
-    <h2 class="sec-title">Missions &amp; Key Heists</h2>
-    <div class="grid-2">
-      <div class="card">
-        <h3>Mission 01: Survey Programmer</h3>
-        <div class="meta">Apsidata Solutions • Dec 2024 – Present</div>
-        <ul>
-          <li>Programmed &amp; delivered 15+ online market research surveys using Decipher.</li>
-          <li>Performed data quality checks, variable mapping, branching, piping, masking &amp; quota management.</li>
-          <li>Conducted end-to-end QA and built dashboards in Studio to visualize survey responses.</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3>Mission 02: Web Developer</h3>
-        <div class="meta">No Borders Technologies Pvt. Ltd. • June 2024 – Nov 2024</div>
-        <ul>
-          <li>Developed responsive web apps using HTML, CSS, JavaScript, React.js &amp; Next.js.</li>
-          <li>Implemented form validations, API integration &amp; debugging for reliable data capture.</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3>Heist: Customer &amp; Product Surveys</h3>
-        <div class="meta">Decipher • Survey Engineering</div>
-        <ul>
-          <li>Customer Satisfaction Survey with conditional routing, quota controls &amp; validations.</li>
-          <li>Product Feedback Survey with rating grids, display logic, masking &amp; randomisation.</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3>Achievement: Quarterly Award Winner</h3>
-        <div class="meta">Apsidata Solutions • Recognition</div>
-        <ul>
-          <li>Awarded Quarterly Award for strong performance, quality delivery &amp; survey programming.</li>
-          <li>B.Tech in Computer Science (2020–2024) — CGPA: 7.5/10.</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <section id="loadout">
-    <h2 class="sec-title">Tech Loadout</h2>
-    <div class="tags">
-      <span class="tag">SQL</span><span class="tag">Python</span><span class="tag">Microsoft Excel</span>
-      <span class="tag">Power BI</span><span class="tag">Studio</span><span class="tag">Decipher</span>
-      <span class="tag">Data Cleaning</span><span class="tag">Data Validation</span><span class="tag">Variable Mapping</span>
-      <span class="tag">Quota Management</span><span class="tag">HTML / CSS / JS</span><span class="tag">React.js / Next.js</span>
-    </div>
-  </section>
-
-  <section id="contact">
-    <h2 class="sec-title">Ready For Your Next Data Mission</h2>
-    <div class="card">
-      <p style="font-size:1.1rem;margin-bottom:10px;"><strong>Email:</strong> mrai645@gmail.com &nbsp;|&nbsp; <strong>Phone:</strong> +91 8755238702</p>
-      <p style="font-size:1.1rem;">
-        <strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/mohitrai6236" target="_blank" style="color:var(--cyan)">linkedin.com/in/mohitrai6236</a> &nbsp;|&nbsp;
-        <strong>GitHub:</strong> <a href="https://github.com/mohitrai6236" target="_blank" style="color:var(--pink)">github.com/mohitrai6236</a>
-      </p>
-    </div>
-  </section>
-
-  <footer>MOHIT RAI • GRAND PORTFOLIO VI • NOIDA, UTTAR PRADESH, INDIA</footer>
-
-  <script>
-    const canvas = document.getElementById('gtaGame');
-    const ctx = canvas.getContext('2d');
-    const scoreEl = document.getElementById('score');
-    const skillEl = document.getElementById('lastSkill');
-    const starsEl = document.getElementById('stars');
-
-    const skills = ['SQL', 'PYTHON', 'DECIPHER', 'POWER BI', 'STUDIO', 'EXCEL', 'REACT.JS', 'QA'];
-    let heliY = 190;
-    let targetY = 190;
-    let score = 0;
-    let running = false;
-    let items = [];
-    let particles = [];
-    let frame = 0;
-
-    function updateHud() {
-      scoreEl.textContent = score;
-      const lit = Math.min(5, Math.floor(score / 30) + 1);
-      starsEl.textContent = '★'.repeat(lit) + '☆'.repeat(5 - lit);
-    }
-
-    function resetGame() {
-      heliY = 190; targetY = 190; score = 0; items = []; particles = []; frame = 0; running = true;
-      skillEl.textContent = 'FLYING!';
-      updateHud();
-    }
-
-    document.getElementById('startBtn').onclick = resetGame;
-    document.getElementById('upBtn').onclick = () => { targetY = Math.max(48, targetY - 55); };
-    document.getElementById('downBtn').onclick = () => { targetY = Math.min(330, targetY + 55); };
-
-    window.addEventListener('keydown', (e) => {
-      if (['ArrowUp', 'w', 'W'].includes(e.key)) { e.preventDefault(); targetY = Math.max(48, targetY - 45); }
-      if (['ArrowDown', 's', 'S'].includes(e.key)) { e.preventDefault(); targetY = Math.min(330, targetY + 45); }
-    });
-
-    function pointerMove(clientY) {
-      if (!running) return;
-      const rect = canvas.getBoundingClientRect();
-      const relY = ((clientY - rect.top) / rect.height) * canvas.height;
-      targetY = Math.max(48, Math.min(330, relY));
-    }
-    canvas.addEventListener('mousemove', (e) => pointerMove(e.clientY));
-    canvas.addEventListener('touchmove', (e) => { e.preventDefault(); pointerMove(e.touches[0].clientY); }, { passive: false });
-
-    function drawSkyline() {
-      const buildings = [80, 140, 95, 170, 110, 155, 90, 130, 165, 105, 145];
-      const offset = (frame * 0.8) % 220;
-      ctx.fillStyle = 'rgba(15, 8, 30, 0.85)';
-      for (let i = -1; i < 12; i++) {
-        const bh = buildings[(i + 12) % buildings.length];
-        const bx = i * 110 - (offset % 110);
-        ctx.fillRect(bx, canvas.height - bh, 96, bh);
-        ctx.fillStyle = 'rgba(255, 42, 133, 0.25)';
-        ctx.fillRect(bx + 12, canvas.height - bh + 14, 14, 18);
-        ctx.fillStyle = 'rgba(15, 8, 30, 0.85)';
+    const MISSIONS = [
+      {
+        title: "Mission 01: Customer Satisfaction Survey",
+        stack: "Decipher • Conditional Routing • Quota Controls",
+        desc: "Developed a structured customer satisfaction survey with conditional routing, quota controls, data validations, and multiple question types; verified responses and variable mapping.",
+        github: "https://github.com/mohitrai6236"
+      },
+      {
+        title: "Mission 02: Product Feedback Survey",
+        stack: "Decipher • Rating Grids • Masking & Randomisation",
+        desc: "Programmed rating grids, multiple-choice questions, display logic, masking, and randomisation for structured customer feedback collection and validated response coding.",
+        github: "https://github.com/mohitrai6236"
+      },
+      {
+        title: "Mission 03: Grand Portfolio VI",
+        stack: "React • HTML5 Canvas • Web Audio • FFmpeg",
+        desc: "Interactive GTA 6-themed developer portfolio featuring a playable Heli-Heist mini-game, custom launch trailer, interactive city map, and recruiter mode.",
+        github: "https://github.com/mohitrai6236/mohit-gta6-portfolio"
       }
-    }
+    ];
 
-    function drawChopper(x, y) {
-      ctx.save();
-      ctx.translate(x, y);
-      // Rotor
-      const rotorW = 48 + Math.sin(frame * 0.8) * 18;
-      ctx.strokeStyle = '#00f0ff';
-      ctx.lineWidth = 3;
-      ctx.beginPath(); ctx.moveTo(-rotorW, -22); ctx.lineTo(rotorW, -22); ctx.stroke();
-      // Tail
-      ctx.fillStyle = '#ff2a85';
-      ctx.fillRect(-52, -6, 36, 10);
-      // Body
-      ctx.beginPath();
-      ctx.roundRect(-24, -14, 58, 28, 12);
-      ctx.fillStyle = '#ff2a85';
-      ctx.fill();
-      // Cockpit
-      ctx.beginPath();
-      ctx.roundRect(6, -10, 22, 16, 6);
-      ctx.fillStyle = '#00f0ff';
-      ctx.fill();
-      ctx.restore();
-    }
+    function App() {
+      const [loading, setLoading] = useState(true);
+      const [loadPct, setLoadPct] = useState(0);
+      const [recruiterMode, setRecruiterMode] = useState(false);
+      const [soundOn, setSoundOn] = useState(false);
+      const [phoneOpen, setPhoneOpen] = useState(false);
+      const [toast, setToast] = useState("");
+      const [repos, setRepos] = useState([]);
+      const [unlocked, setUnlocked] = useState(["Quarterly Award Winner", "15+ Surveys Delivered"]);
+      const [score, setScore] = useState(0);
+      const [lastSkill, setLastSkill] = useState("READY");
+      const [gameRunning, setGameRunning] = useState(false);
 
-    function loop() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      drawSkyline();
+      const fxCanvasRef = useRef(null);
+      const fxParticlesRef = useRef([]);
+      const gameCanvasRef = useRef(null);
+      const targetYRef = useRef(170);
+      const runningRef = useRef(false);
+      const scoreRef = useRef(0);
+      const videoRef = useRef(null);
 
-      // Smooth chopper easing
-      heliY += (targetY - heliY) * 0.12;
-      drawChopper(140, heliY);
+      const showToast = (msg) => {
+        setToast(msg);
+        setTimeout(() => setToast(""), 2400);
+      };
 
-      if (running) {
-        frame++;
-        if (frame % 75 === 0) {
-          const isBug = Math.random() < 0.26;
-          items.push({
-            x: canvas.width + 40,
-            y: 60 + Math.random() * 250,
-            isBug,
-            label: isBug ? 'DRONE' : skills[Math.floor(Math.random() * skills.length)]
-          });
-        }
+      const unlockBadge = (badge) => {
+        setUnlocked((prev) => prev.includes(badge) ? prev : [...prev, badge]);
+      };
 
-        for (let i = items.length - 1; i >= 0; i--) {
-          const it = items[i];
-          it.x -= 3.4 + Math.min(2.2, score / 80);
-
-          ctx.beginPath();
-          ctx.arc(it.x, it.y, 24, 0, Math.PI * 2);
-          ctx.fillStyle = it.isBug ? 'rgba(255, 59, 59, 0.9)' : 'rgba(0, 240, 255, 0.92)';
-          ctx.fill();
-          ctx.lineWidth = 2;
-          ctx.strokeStyle = it.isBug ? '#ffd700' : '#ffffff';
-          ctx.stroke();
-
-          ctx.fillStyle = '#0c0618';
-          ctx.font = 'bold 11px sans-serif';
-          ctx.textAlign = 'center';
-          ctx.fillText(it.label, it.x, it.y + 4);
-
-          const dist = Math.hypot(it.x - 140, it.y - heliY);
-          if (dist < 44) {
-            if (it.isBug) {
-              running = false;
-              skillEl.textContent = 'BUSTED! HIT A DRONE';
-            } else {
-              score += 10;
-              skillEl.textContent = it.label + ' (+10)';
-              updateHud();
-              for (let p = 0; p < 10; p++) {
-                particles.push({
-                  x: it.x, y: it.y,
-                  vx: (Math.random() - 0.5) * 5,
-                  vy: (Math.random() - 0.5) * 5,
-                  life: 24
-                });
-              }
-            }
-            items.splice(i, 1);
-          } else if (it.x < -40) {
-            items.splice(i, 1);
-          }
-        }
-
-        for (let i = particles.length - 1; i >= 0; i--) {
-          const p = particles[i];
-          p.x += p.vx; p.y += p.vy; p.life--;
-          ctx.fillStyle = `rgba(255, 215, 0, ${p.life / 24})`;
-          ctx.fillRect(p.x, p.y, 5, 5);
-          if (p.life <= 0) particles.splice(i, 1);
-        }
-      } else {
-        ctx.fillStyle = 'rgba(0,0,0,0.45)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#ffd700';
-        ctx.font = 'bold 32px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText('PRESS START TO FLY VICE CITY HELI-HEIST', canvas.width / 2, 130);
-      }
-
-      requestAnimationFrame(loop);
-    }
-    loop();
-
-    // --- MAGICAL HOVER + CRAZY CLICK OVERDRIVE ---
-    const portrait = document.getElementById('heroPortrait');
-    const glare = document.getElementById('portraitGlare');
-    const fxCanvas = document.getElementById('overdriveFx');
-    const fxCtx = fxCanvas.getContext('2d');
-    let fxParticles = [];
-
-    function resizeFx() {
-      fxCanvas.width = window.innerWidth;
-      fxCanvas.height = window.innerHeight;
-    }
-    window.addEventListener('resize', resizeFx);
-    resizeFx();
-
-    portrait.addEventListener('mousemove', (e) => {
-      const r = portrait.getBoundingClientRect();
-      const x = (e.clientX - r.left) / r.width;
-      const y = (e.clientY - r.top) / r.height;
-      const rotY = (x - 0.5) * 26;
-      const rotX = (0.5 - y) * 26;
-      portrait.style.transform = `perspective(900px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.04)`;
-      glare.style.background = `radial-gradient(circle at ${x * 100}% ${y * 100}%, rgba(255,255,255,0.6), rgba(0,240,255,0.28) 35%, transparent 70%)`;
-    });
-
-    portrait.addEventListener('mouseleave', () => {
-      portrait.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) scale(1)';
-    });
-
-    function playOverdriveSynth() {
-      const AudioCtx = window.AudioContext || window.webkitAudioContext;
-      if (!AudioCtx) return;
-      const ac = new AudioCtx();
-      const now = ac.currentTime;
-      [110, 220, 330, 440, 660, 880].forEach((freq, idx) => {
+      const playSynth = () => {
+        if (!soundOn) return;
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return;
+        const ac = new AC();
         const osc = ac.createOscillator();
-        const gain = ac.createGain();
-        osc.type = idx % 2 === 0 ? 'sawtooth' : 'triangle';
-        osc.frequency.setValueAtTime(freq, now + idx * 0.04);
-        osc.frequency.exponentialRampToValueAtTime(freq * 1.5, now + 0.45);
-        gain.gain.setValueAtTime(0.08, now + idx * 0.04);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
-        osc.connect(gain); gain.connect(ac.destination);
-        osc.start(now + idx * 0.04); osc.stop(now + 0.62);
-      });
-    }
+        const g = ac.createGain();
+        osc.type = "triangle";
+        osc.frequency.setValueAtTime(220, ac.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(440, ac.currentTime + 0.18);
+        g.gain.setValueAtTime(0.06, ac.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.25);
+        osc.connect(g); g.connect(ac.destination);
+        osc.start(); osc.stop(ac.currentTime + 0.26);
+      };
 
-    portrait.addEventListener('click', (e) => {
-      playOverdriveSynth();
-      document.body.classList.remove('overdrive-flash');
-      void document.body.offsetWidth;
-      document.body.classList.add('overdrive-flash');
+      useEffect(() => {
+        const iv = setInterval(() => {
+          setLoadPct((p) => {
+            if (p >= 100) { clearInterval(iv); setLoading(false); return 100; }
+            return p + 25;
+          });
+        }, 120);
+        return () => clearInterval(iv);
+      }, []);
 
-      const r = portrait.getBoundingClientRect();
-      const cx = r.left + r.width / 2;
-      const cy = r.top + r.height / 2;
-      const words = ['SQL', 'PYTHON', 'DECIPHER', 'POWER BI', 'STUDIO', 'REACT.JS', '★★★★★', '6-STAR OVERDRIVE'];
-      const colors = ['#ff2a85', '#00f0ff', '#ffd700', '#ffffff'];
+      useEffect(() => {
+        fetch("https://api.github.com/users/mohitrai6236/repos?sort=updated&per_page=4")
+          .then((r) => r.ok ? r.json() : [])
+          .then((data) => { if (Array.isArray(data)) setRepos(data); })
+          .catch(() => {});
+      }, []);
 
-      for (let i = 0; i < 95; i++) {
-        const angle = Math.random() * Math.PI * 2;
-        const speed = 3 + Math.random() * 14;
-        fxParticles.push({
-          x: cx, y: cy,
-          vx: Math.cos(angle) * speed,
-          vy: Math.sin(angle) * speed,
-          size: 3 + Math.random() * 6,
-          color: colors[i % colors.length],
-          text: i % 8 === 0 ? words[i % words.length] : null,
-          life: 75 + Math.random() * 35
-        });
-      }
-    });
+      // Easter Egg: type HESOYAM
+      useEffect(() => {
+        let buf = "";
+        const onKey = (e) => {
+          buf = (buf + e.key.toUpperCase()).slice(-7);
+          if (buf === "HESOYAM") {
+            showToast("CHEAT ACTIVATED: +$250,000 & FULL DATA ARMOR!");
+            unlockBadge("Cheat Code Master");
+          }
+        };
+        window.addEventListener("keydown", onKey);
+        return () => window.removeEventListener("keydown", onKey);
+      }, []);
 
-    function fxLoop() {
-      fxCtx.clearRect(0, 0, fxCanvas.width, fxCanvas.height);
-      for (let i = fxParticles.length - 1; i >= 0; i--) {
-        const p = fxParticles[i];
-        p.x += p.vx; p.y += p.vy; p.vy += 0.14; p.life--;
-        fxCtx.globalAlpha = Math.max(0, p.life / 100);
-        fxCtx.fillStyle = p.color;
-        if (p.text) {
-          fxCtx.font = 'bold 18px sans-serif';
-          fxCtx.fillText(p.text, p.x, p.y);
-        } else {
-          fxCtx.beginPath();
-          fxCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-          fxCtx.fill();
+      // Overdrive Particle Loop
+      useEffect(() => {
+        const c = fxCanvasRef.current;
+        if (!c) return;
+        const ctx = c.getContext("2d");
+        const resize = () => { c.width = window.innerWidth; c.height = window.innerHeight; };
+        resize(); window.addEventListener("resize", resize);
+        let raf;
+        const loop = () => {
+          ctx.clearRect(0, 0, c.width, c.height);
+          const arr = fxParticlesRef.current;
+          for (let i = arr.length - 1; i >= 0; i--) {
+            const p = arr[i];
+            p.x += p.vx; p.y += p.vy; p.vy += 0.14; p.life--;
+            ctx.globalAlpha = Math.max(0, p.life / 90);
+            ctx.fillStyle = p.color;
+            ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
+            if (p.life <= 0) arr.splice(i, 1);
+          }
+          ctx.globalAlpha = 1;
+          raf = requestAnimationFrame(loop);
+        };
+        loop();
+        return () => { cancelAnimationFrame(raf); window.removeEventListener("resize", resize); };
+      }, []);
+
+      // Heli-Heist Mini-Game Loop
+      useEffect(() => {
+        const c = gameCanvasRef.current;
+        if (!c || recruiterMode) return;
+        const ctx = c.getContext("2d");
+        const skills = ["SQL", "PYTHON", "DECIPHER", "POWER BI", "STUDIO", "EXCEL", "REACT"];
+        let heliY = 170, items = [], frame = 0, raf;
+
+        const loop = () => {
+          ctx.clearRect(0, 0, c.width, c.height);
+          heliY += (targetYRef.current - heliY) * 0.12;
+          // Chopper
+          ctx.fillStyle = "#ff2a85";
+          ctx.fillRect(100, heliY - 12, 54, 24);
+          ctx.fillStyle = "#00f0ff";
+          ctx.fillRect(126, heliY - 8, 20, 14);
+
+          if (runningRef.current) {
+            frame++;
+            if (frame % 75 === 0) {
+              const isBug = Math.random() < 0.25;
+              items.push({ x: c.width + 30, y: 45 + Math.random() * 250, isBug, label: isBug ? "DRONE" : skills[Math.floor(Math.random() * skills.length)] });
+            }
+            for (let i = items.length - 1; i >= 0; i--) {
+              const it = items[i];
+              it.x -= 3.4;
+              ctx.beginPath(); ctx.arc(it.x, it.y, 22, 0, Math.PI * 2);
+              ctx.fillStyle = it.isBug ? "#ff3b3b" : "#00f0ff"; ctx.fill();
+              ctx.fillStyle = "#0c0618"; ctx.font = "bold 11px sans-serif"; ctx.textAlign = "center";
+              ctx.fillText(it.label, it.x, it.y + 4);
+              if (Math.hypot(it.x - 125, it.y - heliY) < 40) {
+                if (it.isBug) {
+                  runningRef.current = false; setGameRunning(false); setLastSkill("BUSTED!");
+                } else {
+                  scoreRef.current += 10; setScore(scoreRef.current); setLastSkill(it.label + " +10");
+                  unlockBadge("Heli-Heist Pilot");
+                }
+                items.splice(i, 1);
+              } else if (it.x < -30) items.splice(i, 1);
+            }
+          } else {
+            ctx.fillStyle = "#ffd700"; ctx.font = "bold 26px sans-serif"; ctx.textAlign = "center";
+            ctx.fillText("PRESS START TO FLY VICE CITY HELI-HEIST", c.width / 2, 170);
+          }
+          raf = requestAnimationFrame(loop);
+        };
+        loop();
+        return () => cancelAnimationFrame(raf);
+      }, [recruiterMode]);
+
+      const triggerPortraitOverdrive = (e) => {
+        playSynth();
+        unlockBadge("Hyper-Overdrive");
+        showToast("6-STAR HYPER-OVERDRIVE ACTIVATED!");
+        const r = e.currentTarget.getBoundingClientRect();
+        const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+        const cols = ["#ff2a85", "#00f0ff", "#ffd700", "#ffffff"];
+        for (let i = 0; i < 80; i++) {
+          const a = Math.random() * Math.PI * 2, sp = 3 + Math.random() * 12;
+          fxParticlesRef.current.push({ x: cx, y: cy, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, size: 3 + Math.random() * 5, color: cols[i % 4], life: 80 });
         }
-        if (p.life <= 0) fxParticles.splice(i, 1);
+      };
+
+      if (loading) {
+        return (
+          <div className="loader">
+            <div style={{ color: "var(--cyan)", fontWeight: 900, letterSpacing: 2 }}>LOADING LEONIDA // MOHIT RAI</div>
+            <div className="loader-bar"><div className="loader-fill" style={{ width: `${loadPct}%` }} /></div>
+            <button className="pill-btn" onClick={() => setLoading(false)}>Skip Intro</button>
+          </div>
+        );
       }
-      fxCtx.globalAlpha = 1;
-      requestAnimationFrame(fxLoop);
+
+      return (
+        <div>
+          <canvas id="overdriveFx" ref={fxCanvasRef} />
+          {toast && <div id="gtaToast">{toast}</div>}
+
+          <nav>
+            <div className="logo">MOHIT<span>RAI</span> // VI</div>
+            <div className="nav-links">
+              {!recruiterMode && (
+                <>
+                  <a href="#map">City Map</a>
+                  <a href="#game">Heli-Heist</a>
+                  <a href="#story">Story Mode</a>
+                  <a href="#missions">Missions</a>
+                  <a href="#github">GitHub</a>
+                </>
+              )}
+              <button className={`pill-btn ${soundOn ? "active" : ""}`} onClick={() => setSoundOn(!soundOn)}>
+                {soundOn ? "SFX: ON" : "SFX: OFF"}
+              </button>
+              <button className={`pill-btn ${recruiterMode ? "active" : ""}`} onClick={() => setRecruiterMode(!recruiterMode)}>
+                {recruiterMode ? "GTA 6 Mode" : "Recruiter Mode"}
+              </button>
+            </div>
+          </nav>
+
+          {recruiterMode ? (
+            <div className="recruiter-wrap">
+              <h1 style={{ textShadow: "none", fontSize: "2.2rem", color: "#111827" }}>{PROFILE.name}</h1>
+              <p style={{ fontWeight: 700, color: "#4b5563" }}>{PROFILE.role} • {PROFILE.location}</p>
+              <p style={{ marginTop: 8 }}>{PROFILE.email} | {PROFILE.phone} | <a href={PROFILE.linkedin} target="_blank">LinkedIn</a> | <a href={PROFILE.github} target="_blank">GitHub</a></p>
+              <h2>Professional Summary</h2>
+              <p>{PROFILE.summary}</p>
+              <h2>Experience</h2>
+              <p><strong>Survey Programmer — Apsidata Solutions</strong> (Dec 2024 – Present): Delivered 15+ Decipher surveys, QA, variable mapping, branching/piping/masking, and Studio dashboards.</p>
+              <p style={{ marginTop: 6 }}><strong>Web Developer — No Borders Technologies Pvt. Ltd.</strong> (Jun 2024 – Nov 2024): Built responsive web apps with React.js, Next.js, HTML, CSS, JavaScript.</p>
+              <h2>Education</h2>
+              <p>B.Tech in Computer Science — Rameshwaram Institute of Technology & Management (2020–2024) | CGPA: 7.5/10</p>
+              <h2>Technical Skills</h2>
+              <p>SQL, Python, Microsoft Excel, Power BI, Studio, Decipher, Data Cleaning, Data Validation, QA, React.js, Next.js</p>
+            </div>
+          ) : (
+            <>
+              <header className="hero" id="about">
+                <div>
+                  <h1 style={{ marginTop: 8 }}>{PROFILE.name}</h1>
+                  <div className="subtitle">{PROFILE.role}</div>
+                  <p style={{ color: "var(--muted)", marginBottom: 20 }}>{PROFILE.summary}</p>
+                  <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 22 }}>
+                    <a href="#map" className="btn btn-pink">Open City Map</a>
+                    <a href="#game" className="btn btn-cyan">Play Heli-Heist</a>
+                  </div>
+                  {SKILLS.map((s) => (
+                    <div key={s.name} style={{ marginBottom: 10 }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.85rem", fontWeight: 700 }}>
+                        <span>{s.name}</span><span style={{ color: "var(--cyan)" }}>{s.level}%</span>
+                      </div>
+                      <div className="skill-bar"><div className="skill-fill" style={{ width: `${s.level}%` }} /></div>
+                    </div>
+                  ))}
+                </div>
+                <div className="portrait-frame" onClick={triggerPortraitOverdrive}
+                  onMouseMove={(e) => {
+                    const r = e.currentTarget.getBoundingClientRect();
+                    const x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+                    e.currentTarget.style.transform = `perspective(900px) rotateX(${(0.5 - y) * 24}deg) rotateY(${(x - 0.5) * 24}deg) scale(1.03)`;
+                  }}
+                  onMouseLeave={(e) => { e.currentTarget.style.transform = "none"; }}>
+                  <img src="portrait.jpg" alt="Mohit Rai GTA 6 Portrait" />
+                  <div className="portrait-glare" />
+                  <div className="portrait-hint">HOVER &amp; CLICK FOR OVERDRIVE</div>
+                </div>
+              </header>
+
+              <section id="map">
+                <h2 className="sec-title">Interactive Vice City Map</h2>
+                <div className="map-grid">
+                  {[
+                    { name: "Ocean Drive", label: "About & Stats", href: "#about" },
+                    { name: "Starfish Island", label: "Heli-Heist Game", href: "#game" },
+                    { name: "Downtown", label: "Career Story Mode", href: "#story" },
+                    { name: "Vice Port", label: "Mission Projects", href: "#missions" },
+                    { name: "Malibu Club", label: "Contact & Phone", href: "#contact" }
+                  ].map((loc) => (
+                    <a key={loc.name} href={loc.href} className="map-node" style={{ textDecoration: "none" }} onClick={playSynth}>
+                      <div style={{ color: "var(--gold)", fontWeight: 900 }}>{loc.name}</div>
+                      <div style={{ color: "var(--cyan)", fontSize: "0.85rem" }}>{loc.label}</div>
+                    </a>
+                  ))}
+                </div>
+              </section>
+
+              <section id="game">
+                <h2 className="sec-title">Vice City Heli-Heist</h2>
+                <div className="card">
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10, flexWrap: "wrap", gap: 10, fontWeight: 800 }}>
+                    <span>SCORE: <strong style={{ color: "var(--cyan)" }}>{score}</strong></span>
+                    <span>SKILL: <strong style={{ color: "var(--pink)" }}>{lastSkill}</strong></span>
+                    <button className="btn btn-pink" style={{ padding: "6px 14px", fontSize: "0.8rem" }} onClick={() => { scoreRef.current = 0; setScore(0); runningRef.current = true; setGameRunning(true); }}>
+                      {gameRunning ? "Restart" : "Start"}
+                    </button>
+                  </div>
+                  <canvas id="gtaGame" ref={gameCanvasRef} width="1000" height="340"
+                    onMouseMove={(e) => {
+                      const r = e.currentTarget.getBoundingClientRect();
+                      targetYRef.current = Math.max(40, Math.min(300, ((e.clientY - r.top) / r.height) * 340));
+                    }}
+                    onTouchMove={(e) => {
+                      const r = e.currentTarget.getBoundingClientRect();
+                      targetYRef.current = Math.max(40, Math.min(300, ((e.touches[0].clientY - r.top) / r.height) * 340));
+                    }}
+                  />
+                </div>
+              </section>
+
+              <section id="trailer">
+                <h2 className="sec-title">Official Launch Trailer</h2>
+                <video ref={videoRef} controls poster="portrait.jpg" onClick={(e) => {
+                  e.preventDefault();
+                  if (videoRef.current.paused) { videoRef.current.play(); showToast("TRAILER: PLAYING"); }
+                  else { videoRef.current.pause(); showToast("TRAILER: PAUSED"); }
+                }}>
+                  <source src="trailer.mp4" type="video/mp4" />
+                </video>
+              </section>
+
+              <section id="story">
+                <h2 className="sec-title">Career Story Mode</h2>
+                <div className="grid-2">
+                  <div className="card">
+                    <h3>Chapter 3: Survey Programmer</h3>
+                    <div className="meta">Apsidata Solutions • Dec 2024 – Present</div>
+                    <p style={{ color: "var(--muted)" }}>Delivered 15+ Decipher surveys, QA, variable mapping, branching, piping, masking, and Studio dashboards.</p>
+                  </div>
+                  <div className="card">
+                    <h3>Chapter 2: Web Developer</h3>
+                    <div className="meta">No Borders Technologies Pvt. Ltd. • Jun 2024 – Nov 2024</div>
+                    <p style={{ color: "var(--muted)" }}>Built responsive web applications using React.js, Next.js, HTML, CSS, JavaScript, and API integrations.</p>
+                  </div>
+                  <div className="card">
+                    <h3>Chapter 1: B.Tech Computer Science</h3>
+                    <div className="meta">Rameshwaram Institute of Technology & Management • 2020 – 2024</div>
+                    <p style={{ color: "var(--muted)" }}>Graduated with CGPA 7.5/10. Foundation in programming, databases, and analytical problem solving.</p>
+                  </div>
+                </div>
+              </section>
+
+              <section id="missions">
+                <h2 className="sec-title">Mission-Based Projects</h2>
+                <div className="grid-2">
+                  {MISSIONS.map((m) => (
+                    <div key={m.title} className="card">
+                      <h3>{m.title}</h3>
+                      <div className="meta">{m.stack}</div>
+                      <p style={{ color: "var(--muted)", marginBottom: 12 }}>{m.desc}</p>
+                      <a href={m.github} target="_blank" className="btn btn-cyan" style={{ padding: "7px 14px", fontSize: "0.78rem" }}>View on GitHub</a>
+                    </div>
+                  ))}
+                </div>
+              </section>
+
+              <section id="achievements">
+                <h2 className="sec-title">Achievements &amp; Badges</h2>
+                <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+                  {unlocked.map((b) => (
+                    <span key={b} style={{ padding: "8px 16px", borderRadius: 10, background: "rgba(255,215,0,0.15)", border: "1px solid var(--gold)", color: "var(--gold)", fontWeight: 800 }}>
+                      ★ {b}
+                    </span>
+                  ))}
+                </div>
+              </section>
+
+              <section id="github">
+                <h2 className="sec-title">Latest GitHub Repositories</h2>
+                <div className="grid-2">
+                  {repos.length > 0 ? repos.map((r) => (
+                    <div key={r.id} className="card">
+                      <h3>{r.name}</h3>
+                      <div className="meta">{r.language || "Portfolio"} • ★ {r.stargazers_count}</div>
+                      <a href={r.html_url} target="_blank" style={{ color: "var(--cyan)", fontWeight: 700 }}>Open Repository →</a>
+                    </div>
+                  )) : (
+                    <div className="card">
+                      <h3>mohitrai6236</h3>
+                      <p style={{ color: "var(--muted)" }}>Visit <a href={PROFILE.github} target="_blank" style={{ color: "var(--cyan)" }}>github.com/mohitrai6236</a> to explore repositories.</p>
+                    </div>
+                  )}
+                </div>
+              </section>
+
+              <section id="contact">
+                <h2 className="sec-title">Contact</h2>
+                <div className="card">
+                  <p><strong>Email:</strong> {PROFILE.email} &nbsp;|&nbsp; <strong>Phone:</strong> {PROFILE.phone}</p>
+                  <p style={{ marginTop: 8 }}>Tip: Type <strong>HESOYAM</strong> anywhere on your keyboard for a secret GTA Easter Egg!</p>
+                </div>
+              </section>
+            </>
+          )}
+
+          <button className="phone-fab" onClick={() => setPhoneOpen(!phoneOpen)}>📱 iFruit Phone</button>
+          {phoneOpen && (
+            <div className="phone-drawer">
+              <div style={{ fontWeight: 900, color: "var(--cyan)", marginBottom: 6 }}>iFRUIT // QUICK LINKS</div>
+              <a className="phone-link" href={PROFILE.linkedin} target="_blank">LinkedIn Profile</a>
+              <a className="phone-link" href={PROFILE.github} target="_blank">GitHub Profile</a>
+              <a className="phone-link" href={`mailto:${PROFILE.email}`}>Email Mohit</a>
+              <a className="phone-link" href={`tel:${PROFILE.phone}`}>Call {PROFILE.phone}</a>
+              <button className="phone-link" style={{ width: "100%", textAlign: "left", border: "none", cursor: "pointer" }} onClick={() => { setRecruiterMode(!recruiterMode); setPhoneOpen(false); }}>
+                {recruiterMode ? "Switch to GTA 6 Mode" : "Switch to Recruiter Mode"}
+              </button>
+            </div>
+          )}
+        </div>
+      );
     }
-    fxLoop();
 
-    // --- UNIQUE FX FOR EVERY BLOCK ---
-    const toast = document.getElementById('gtaToast');
-    let toastTimer;
-    function showToast(msg) {
-      toast.textContent = msg;
-      toast.classList.add('show');
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
-    }
-
-    function burstAt(x, y, colors, count = 35, label = null) {
-      for (let i = 0; i < count; i++) {
-        const a = Math.random() * Math.PI * 2;
-        const sp = 2 + Math.random() * 9;
-        fxParticles.push({
-          x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp,
-          size: 2.5 + Math.random() * 4.5,
-          color: colors[i % colors.length],
-          text: (label && i === 0) ? label : null,
-          life: 55 + Math.random() * 25
-        });
-      }
-    }
-
-    document.querySelectorAll('#missions .card').forEach((card) => {
-      card.addEventListener('click', (e) => {
-        burstAt(e.clientX, e.clientY, ['#ffd700', '#00f0ff', '#ff2a85'], 45, 'MISSION PASSED!');
-        showToast('MISSION PASSED! +RESPECT');
-      });
-    });
-
-    document.querySelectorAll('#loadout .tag').forEach((tag) => {
-      tag.addEventListener('click', (e) => {
-        tag.classList.toggle('equipped');
-        burstAt(e.clientX, e.clientY, ['#00f0ff', '#ffd700'], 24, tag.textContent);
-        showToast(tag.classList.contains('equipped') ? `EQUIPPED: ${tag.textContent}` : `UNEQUIPPED: ${tag.textContent}`);
-      });
-    });
-
-    const contactCard = document.querySelector('#contact .card');
-    if (contactCard) {
-      contactCard.addEventListener('click', (e) => {
-        if (navigator.clipboard) navigator.clipboard.writeText('mrai645@gmail.com').catch(() => {});
-        burstAt(e.clientX, e.clientY, ['#ff2a85', '#00f0ff', '#ffffff'], 50, 'EMAIL COPIED!');
-        showToast('COPIED: mrai645@gmail.com');
-      });
-    }
-
-    const trailerVideo = document.querySelector('#trailer video');
-    if (trailerVideo) {
-      trailerVideo.style.cursor = 'pointer';
-      trailerVideo.addEventListener('click', (e) => {
-        e.preventDefault();
-        if (trailerVideo.paused) {
-          trailerVideo.play();
-          showToast('TRAILER: PLAYING');
-        } else {
-          trailerVideo.pause();
-          showToast('TRAILER: PAUSED');
-        }
-      });
-    }
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
   </script>
 </body>
 </html>

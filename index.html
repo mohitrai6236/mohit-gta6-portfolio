@@ -189,6 +189,7 @@
           <strong style="color:var(--gold)">GTA CHEAT CODES (Type on keyboard or click):</strong>
           <button class="pill-btn" style="margin-left:6px" onclick="window.dispatchEvent(new KeyboardEvent('keydown',{key:'R'}));'ESUME'.split('').forEach(k=>window.dispatchEvent(new KeyboardEvent('keydown',{key:k})))">RESUME</button>
           <button class="pill-btn" style="margin-left:4px" onclick="'CONTACT'.split('').forEach(k=>window.dispatchEvent(new KeyboardEvent('keydown',{key:k})))">CONTACT</button>
+          <button class="pill-btn" style="margin-left:4px" onclick="'TRAILER'.split('').forEach(k=>window.dispatchEvent(new KeyboardEvent('keydown',{key:k})))">TRAILER</button>
           <button class="pill-btn" style="margin-left:4px" onclick="'HESOYAM'.split('').forEach(k=>window.dispatchEvent(new KeyboardEvent('keydown',{key:k})))">HESOYAM</button>
         </div>
         <div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:0.85rem;font-weight:700"><span>Decipher &amp; Survey Programming</span><span style="color:var(--cyan)">95%</span></div><div class="skill-bar"><div class="skill-fill" style="width:95%"></div></div></div>
@@ -415,6 +416,11 @@
         document.getElementById("phoneDrawer").style.display = "block";
         if (navigator.clipboard) navigator.clipboard.writeText("mrai645@gmail.com").catch(() => {});
         showToast("CHEAT ACTIVATED: CONTACT & EMAIL COPIED!");
+      }
+      if (buf.endsWith("TRAILER")) {
+        document.getElementById("trailer").scrollIntoView({ behavior: "smooth" });
+        tv.play();
+        showToast("CHEAT ACTIVATED: LAUNCH TRAILER PLAYING!");
       }
     });
   </script>

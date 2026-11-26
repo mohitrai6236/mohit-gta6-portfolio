@@ -612,6 +612,21 @@
         showToast('COPIED: mrai645@gmail.com');
       });
     }
+
+    const trailerVideo = document.querySelector('#trailer video');
+    if (trailerVideo) {
+      trailerVideo.style.cursor = 'pointer';
+      trailerVideo.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (trailerVideo.paused) {
+          trailerVideo.play();
+          showToast('TRAILER: PLAYING');
+        } else {
+          trailerVideo.pause();
+          showToast('TRAILER: PAUSED');
+        }
+      });
+    }
   </script>
 </body>
 </html>
